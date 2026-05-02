@@ -1,0 +1,110 @@
+#include <iostream>
+using namespace std;
+
+
+//Простір
+const int x = 1000, y = 1000;
+char space[y][x];
+
+
+
+class Cube
+{
+    int _scalex, _scaley;
+    int _positionx, _positiony;
+public:
+    Cube(int scalex, int scaley, int positionx, int positiony)
+    {
+        _scalex = scalex;
+        _scaley = scaley;
+        _positionx = positionx;
+        _positiony = positiony;
+    }
+
+    void cubePaint()
+    {
+        for (int i = _positiony; i < _positiony + _scaley; i++)
+        {
+            for (int j = _positionx; j < _positionx + _scalex; j++)
+                space[i][j] = '@';
+        }
+    }
+};
+
+
+
+class Screen
+{
+    int _scalex, _scaley;
+    int _positionx, _positiony;
+    char screen[30][120];
+public:
+    Screen(int scalesx, int scalesy, int positionsx, int positionsy)
+    {
+        _scalex = scalesx;
+        _scaley = scalesy;
+        _positionx = positionsx;
+        _positiony = positionsy;
+    }
+
+    void paintScreen()
+    {
+        for (int i = _positiony; i < _positiony + _scaley; i++)
+        {
+            for (int j = _positionx; j < _positionx + _scalex; j++)
+            {
+                screen[i - _positiony][j - _positionx] = space[i][j];
+            }
+        }
+        for (int i = 0; i < _scaley; i++)
+        {
+            for (int j = 0; j < _scalex; j++) screen[i][0] = '@';
+            for (int j = 0; j < _scalex; j++) screen[0][j] = '@';
+            for (int j = 0; j < _scalex; j++) screen[i][_scalex - 1] = '@';
+            for (int j = 0; j < _scalex; j++) screen[_scaley - 1][j] = '@';
+        }
+    }
+
+    void printScreen()
+    {
+        for (int i = 0; i < _scaley; i++)
+        {
+            for (int j = 0; j < _scalex; j++)
+            {
+
+                cout << screen[i][j];
+            }
+            cout << endl;
+        }
+
+    }
+};
+
+void nullSpace()
+{
+    for (int i = 0; i < y; i++)
+    {
+        for (int j = 0; j < x;j++)
+        {
+            space[i][j] = ' ';
+        }
+    }
+}
+
+int main()
+{
+
+
+    nullSpace();
+    Cube cube1(2, 2, 14, 14);
+    cube1.cubePaint();
+
+    cout << "\033[2J\033[1;1H";
+    Screen screen1(120, 30, 0, 0);
+    screen1.paintScreen();
+    screen1.printScreen();
+
+ 
+
+    return 0;
+}
